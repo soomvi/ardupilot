@@ -6,7 +6,7 @@
 
 #include "ap_version.h"
 
-#define THISFIRMWARE "ArduCopter V4.1.3"
+#define THISFIRMWARE "Soomvi V4.1.3"
 
 // the following line is parsed by the autotest scripts
 #define FIRMWARE_VERSION 4,1,3,FIRMWARE_VERSION_TYPE_OFFICIAL
