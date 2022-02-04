@@ -26,7 +26,7 @@ bool ModeAltHold::init(bool ignore_checks)
 		_state = SubMode::GlitchAltHold_Starting;
 		_loop_timer = AP_HAL::millis();
 		gcs().send_text(MAV_SEVERITY_INFO, "AltHold on GPS Fail");
-		gcs().send_text(MAV_SEVERITY_INFO, "home bearing = %d", copter.rtl_bearing);
+		gcs().send_text(MAV_SEVERITY_INFO, "home bearing = %ld", copter.rtl_bearing);
 	}
 	else
 		_state = SubMode::GlitchAltHold_None;

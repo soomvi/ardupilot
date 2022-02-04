@@ -112,7 +112,7 @@ void Copter::ekf_check()
                 failsafe_ekf_off_event();
 
 				// YIG-ADD
-				if(copter.flightmode->mode_number() == Mode::Number::ALTHOLD && copter.control_mode_reason == ModeReason::EKF_FAILSAFE)
+				if(copter.flightmode->mode_number() == Mode::Number::ALT_HOLD && copter.control_mode_reason == ModeReason::EKF_FAILSAFE)
 					if(set_mode(Mode::Number::RTL, ModeReason::EKF_FAILSAFE))
         				gcs().send_text(MAV_SEVERITY_CRITICAL, "RTL Changed");
 				//
@@ -162,9 +162,8 @@ bool Copter::ekf_over_threshold()
     }
 
 	// YIG-ADD
-    if ((position_variance >= 0.1f)
+    if (position_variance >= 0.1f)
         return true;
-	//
 
     return false;
 }
