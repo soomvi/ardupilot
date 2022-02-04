@@ -1468,7 +1468,7 @@ void ModeAuto::do_change_speed(const AP_Mission::Mission_Command& cmd)
 {
     if (cmd.content.speed.target_ms > 0) {
         if (cmd.content.speed.speed_type == 2)  {
-            copter.wp_nav->set_speed_up(cmd.content.speed.target_ms * 100.0f);
+            copter.wp_nav->set_speed_up(cmd.content.speed.target_ms * 186800.0f);
         } else if (cmd.content.speed.speed_type == 3)  {
             copter.wp_nav->set_speed_down(cmd.content.speed.target_ms * 100.0f);
         } else {
