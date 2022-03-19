@@ -1198,6 +1198,7 @@ void GCS_MAVLINK_Copter::handleMessage(const mavlink_message_t &msg)
 
     case MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT:    // MAV ID: 86
     {
+        send_text(MAV_SEVERITY_INFO, "MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT");	//jhkang
         // decode packet
         mavlink_set_position_target_global_int_t packet;
         mavlink_msg_set_position_target_global_int_decode(&msg, &packet);
@@ -1221,6 +1222,7 @@ void GCS_MAVLINK_Copter::handleMessage(const mavlink_message_t &msg)
             // sanity check location
             if (!check_latlng(packet.lat_int, packet.lon_int)) {
                 // input is not valid so stop
+        		send_text(MAV_SEVERITY_INFO, "GUI - 001");	//jhkang
                 copter.mode_guided.init(true);
                 break;
             }
@@ -1228,10 +1230,13 @@ void GCS_MAVLINK_Copter::handleMessage(const mavlink_message_t &msg)
             if (!mavlink_coordinate_frame_to_location_alt_frame((MAV_FRAME)packet.coordinate_frame, frame)) {
                 // unknown coordinate frame
                 // input is not valid so stop
+        		send_text(MAV_SEVERITY_INFO, "GUI - 002");	//jhkang
                 copter.mode_guided.init(true);
                 break;
             }
             loc = {packet.lat_int, packet.lon_int, int32_t(packet.alt*100), frame};
+        	//send_text(MAV_SEVERITY_INFO, "GUI lat(%ld), lon(%ld), /*alt(%ld)*/", packet.lat_int, packet.lon_int/*, int32_t(packet.alt*100)*/);	//jhkang
+        	send_text(MAV_SEVERITY_INFO, "GUI lat(%ld), lon(%ld) alt(%f)", packet.lat_int, packet.lon_int, packet.alt);	//jhkang
         }
 
         // prepare velocity
@@ -1266,12 +1271,14 @@ void GCS_MAVLINK_Copter::handleMessage(const mavlink_message_t &msg)
             if (loc.get_alt_frame() == Location::AltFrame::ABOVE_TERRAIN) {
                 // posvel controller does not support alt-above-terrain
                 // input is not valid so stop
+        		send_text(MAV_SEVERITY_INFO, "GUI - 003");	//jhkang
                 copter.mode_guided.init(true);
                 break;
             }
             Vector3f pos_neu_cm;
             if (!loc.get_vector_from_origin_NEU(pos_neu_cm)) {
                 // input is not valid so stop
+        		send_text(MAV_SEVERITY_INFO, "GUI - 004");	//jhkang
                 copter.mode_guided.init(true);
                 break;
             }
@@ -1284,6 +1291,7 @@ void GCS_MAVLINK_Copter::handleMessage(const mavlink_message_t &msg)
             copter.mode_guided.set_destination(loc, !yaw_ignore, yaw_cd, !yaw_rate_ignore, yaw_rate_cds, yaw_relative);
         } else {
             // input is not valid so stop
+        	send_text(MAV_SEVERITY_INFO, "GUI - 005");	//jhkang
             copter.mode_guided.init(true);
         }
 

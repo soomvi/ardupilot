@@ -253,6 +253,10 @@ bool AP_Follow::get_target_heading_deg(float &heading) const
 // handle mavlink DISTANCE_SENSOR messages
 void AP_Follow::handle_msg(const mavlink_message_t &msg)
 {
+	if (msg.sysid == 100) {
+		gcs().send_text(MAV_SEVERITY_NOTICE, "FOL msg.sysid (100) msg.msgid (%lu)", msg.msgid);
+	}
+
     // exit immediately if not enabled
     if (!_enabled) {
         return;
@@ -260,12 +264,13 @@ void AP_Follow::handle_msg(const mavlink_message_t &msg)
 
     // skip our own messages
     if (msg.sysid == mavlink_system.sysid) {
+		gcs().send_text(MAV_SEVERITY_NOTICE, "FOL skip-our own messages (%d)", msg.sysid);
         return;
     }
 
     // skip message if not from our target
     if (_sysid != 0 && msg.sysid != _sysid) {
-        if (_automatic_sysid) {
+        if (_automatic_sysid) { gcs().send_text(MAV_SEVERITY_NOTICE, "FOL automatic_sysid");
             // maybe timeout who we were following...
             if ((_last_location_update_ms == 0) || (AP_HAL::millis() - _last_location_update_ms > AP_FOLLOW_SYSID_TIMEOUT_MS)) {
                 _sysid.set(0);
@@ -275,7 +280,7 @@ void AP_Follow::handle_msg(const mavlink_message_t &msg)
     }
 
     // decode global-position-int message
-    if (msg.msgid == MAVLINK_MSG_ID_GLOBAL_POSITION_INT) {
+    if (msg.msgid == MAVLINK_MSG_ID_GLOBAL_POSITION_INT) {	// jhkang
 
         // get estimated location and velocity (for logging)
         Location loc_estimate{};
@@ -288,6 +293,8 @@ void AP_Follow::handle_msg(const mavlink_message_t &msg)
 
         // ignore message if lat and lon are (exactly) zero
         if ((packet.lat == 0 && packet.lon == 0)) {
+			// jhkang
+			gcs().send_text(MAV_SEVERITY_WARNING, "FOL lat and lon are exactly zero");
             return;
         }
 
@@ -304,6 +311,15 @@ void AP_Follow::handle_msg(const mavlink_message_t &msg)
             _target_location.alt = packet.alt / 10;                 // convert millimeters to cm
             _target_location.relative_alt = 0;                // reset relative_alt flag
         }
+		// jhkang
+		#if 1
+		//uint32_t now = AP_HAL::millis();
+        //if ((now - last_log_ms >= 2000) || (last_log_ms == 0)) {
+            gcs().send_text(MAV_SEVERITY_NOTICE, "FOL target lat=%ld, lon=%ld, alt=%ld", _target_location.lat, _target_location.lng, _target_location.alt);
+            //last_log_ms = now;
+        //}
+		#endif
+
 
         _target_velocity_ned.x = packet.vx * 0.01f; // velocity north
         _target_velocity_ned.y = packet.vy * 0.01f; // velocity east

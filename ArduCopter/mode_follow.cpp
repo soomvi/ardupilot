@@ -57,6 +57,14 @@ void ModeFollow::run()
         // convert dist_vec_offs to cm in NEU
         const Vector3f dist_vec_offs_neu(dist_vec_offs.x * 100.0f, dist_vec_offs.y * 100.0f, -dist_vec_offs.z * 100.0f);
 
+		//jhkang
+		uint32_t tnow = AP_HAL::millis();
+		if ((tnow - jh_last_log_ms >= 10000) || (jh_last_log_ms == 0)) {
+			gcs().send_text(MAV_SEVERITY_WARNING, "FOL(m) dist_vec_offs.x=%f, dist_vec_offs.y=%f, dist_vec_offs.z=%f", dist_vec_offs.x, dist_vec_offs.y, -dist_vec_offs.z);
+			jh_last_log_ms = tnow;
+		}
+
+
         // calculate desired velocity vector in cm/s in NEU
         const float kp = g2.follow.get_pos_p().kP();
         desired_velocity_neu_cms.x = (vel_of_target.x * 100.0f) + (dist_vec_offs_neu.x * kp);

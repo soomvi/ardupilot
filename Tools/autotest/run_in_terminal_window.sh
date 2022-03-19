@@ -30,6 +30,8 @@ if [ -n "$SITL_RITW_TERMINAL" ]; then
   $SITL_RITW_TERMINAL "$FILEPATH" &
 elif [ -n "$DISPLAY" -a -n "$(which osascript)" ]; then
   osascript -e 'tell application "Terminal" to do script "'"$* "'"'
+elif [ -n "$DISPLAY" -a -n "$(which terminator)" ]; then
+  terminator -e "$*" &
 elif [ -n "$DISPLAY" -a -n "$(which xterm)" ]; then
   if [ $SITL_RITW_MINIMIZE -eq 1 ]; then
       ICONIC=-iconic

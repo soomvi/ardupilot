@@ -807,8 +807,8 @@ def start_mavproxy(opts, stuff):
                     # mavlink out to the containing host OS
                     c.extend(["--out", "10.0.2.2:" + str(port)])
                 else:
-                    c.extend(["--out", "127.0.0.1:" + str(port)])
-
+                    #c.extend(["--out", "127.0.0.1:" + str(port)])
+                    c.extend(["--out", "192.168.0.50:" + str(port)])
         if True:
             if opts.mcast:
                 c.extend(["--master", "mcast:"])

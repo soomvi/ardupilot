@@ -387,7 +387,7 @@ void FlightAxis::update(const struct sitl_input &input)
         update_position();
         update_mag_field_bf();
         extrapolated_s += delta_time;
-        report_FPS();
+        //report_FPS();	- jhkang
         return;
     }
 
@@ -502,7 +502,7 @@ void FlightAxis::update(const struct sitl_input &input)
     // update magnetic field
     update_mag_field_bf();
 
-    report_FPS();
+    //report_FPS();
 }
 
 /*

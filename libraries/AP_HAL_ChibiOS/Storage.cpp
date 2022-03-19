@@ -61,6 +61,9 @@ void Storage::_storage_open(void)
     _dirty_mask.clearall();
 
 #if HAL_WITH_RAMTRON
+	//::printf(">> fram.init() = %d\n\r", fram.init()); //jhkang
+	//::printf(">> fram.read() = %d\n\r", fram.read(0, _buffer, CH_STORAGE_SIZE)); //jhkang
+
     if (fram.init() && fram.read(0, _buffer, CH_STORAGE_SIZE)) {
         _save_backup();
         _initialisedType = StorageBackend::FRAM;

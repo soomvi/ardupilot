@@ -442,8 +442,13 @@ private:
     const uint16_t magDelay_ms = 60;               // Magnetometer measurement delay (msec)
     const uint16_t tasDelay_ms = 100;              // Airspeed measurement delay (msec)
     const uint16_t tiltDriftTimeMax_ms = 15000;    // Maximum number of ms allowed without any form of tilt aiding (GPS, flow, TAS, etc)
+#if 0	// YIG-CHG
     const uint16_t posRetryTimeUseVel_ms = 10000;  // Position aiding retry time with velocity measurements (msec)
     const uint16_t posRetryTimeNoVel_ms = 7000;    // Position aiding retry time without velocity measurements (msec)
+#else
+    const uint16_t posRetryTimeUseVel_ms = 3000;  // Position aiding retry time with velocity measurements (msec)
+    const uint16_t posRetryTimeNoVel_ms = 2000;    // Position aiding retry time without velocity measurements (msec)
+#endif
     const uint16_t hgtRetryTimeMode0_ms = 10000;   // Height retry time with vertical velocity measurement (msec)
     const uint16_t hgtRetryTimeMode12_ms = 5000;   // Height retry time without vertical velocity measurement (msec)
     const uint16_t tasRetryTime_ms = 5000;         // True airspeed timeout and retry interval (msec)

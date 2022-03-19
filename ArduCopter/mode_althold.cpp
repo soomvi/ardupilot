@@ -145,7 +145,7 @@ void ModeAltHold::run()
 				break;
 
 			case SubMode::GlitchAltHold_Starting:
-				auto_yaw.set_yaw_angle_rate(copter.rtl_bearing * 0.01f, 0.0f);
+				auto_yaw.set_yaw_angle_rate(copter.rtl_bearing * 0.01f, 0.0f);		// 2nd argument 0.0f 일때 ATC_SLEW_YAW 값을 사용 함
 			   	_state = SubMode::GlitchAltHold_RotateToHome;
 				gcs().send_text(MAV_SEVERITY_INFO, "starting RotateToHome");
 				break;
@@ -155,11 +155,17 @@ void ModeAltHold::run()
 
 				attitude_control->input_euler_angle_roll_pitch_yaw(target_roll, target_pitch, auto_yaw.yaw(), true);
 
-				if ((abs(wrap_180_cd(ahrs.yaw_sensor-copter.rtl_bearing))) < 5)
+				//if ((abs(wrap_180_cd(ahrs.yaw_sensor-copter.rtl_bearing))) <= 3)
+				if ((abs(wrap_180_cd(ahrs.yaw_sensor-copter.rtl_bearing))) <= 50)	// 1 degree
 				{
+#if 0
 					takeoff.gps_glitch_start(constrain_float(1000.0f,0.0f,10000.0f));
 			   		_state = SubMode::GlitchAltHold_Climb;
 					gcs().send_text(MAV_SEVERITY_INFO, "starting Climb");
+#else
+					_state = SubMode::GlitchAltHold_ReturnToHome;
+					gcs().send_text(MAV_SEVERITY_INFO, "starting ReturnToHome");
+#endif
 				}
 			    break;
 
