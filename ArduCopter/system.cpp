@@ -51,6 +51,8 @@ void Copter::init_ardupilot()
     rssi.init();
     
     barometer.init();
+	msc.init();
+
 
     // setup telem slots with serial ports
     gcs().setup_uarts();

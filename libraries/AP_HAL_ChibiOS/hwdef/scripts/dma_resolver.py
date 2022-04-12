@@ -337,6 +337,8 @@ def write_dma_header(f, peripheral_list, mcu_type, dma_exclude=[],
     for p in peripheral_list:
         forbidden_map[p] = forbidden_list(p, peripheral_list)
 
+    peripheral_list.remove("SPI5_TX")
+    peripheral_list.insert(0, "SPI5_TX")
     for periph in peripheral_list:
         if "_CH" in periph:
             has_bdshot = True # the list contains a CH port

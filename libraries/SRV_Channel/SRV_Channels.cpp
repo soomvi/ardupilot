@@ -33,6 +33,7 @@
   #include <AP_ToshibaCAN/AP_ToshibaCAN.h>
   #include <AP_PiccoloCAN/AP_PiccoloCAN.h>
 #endif
+#include <AP_MSC/AP_MSC.h>
 
 #if NUM_SERVO_CHANNELS == 0
 #pragma GCC diagnostic ignored "-Wtype-limits"
@@ -357,6 +358,8 @@ void SRV_Channels::push()
     // give robotis library a chance to update
     robotis_ptr->update();
 
+	AP_MSC *ap_msc = AP_MSC::get_msc();
+	ap_msc->SRV_push_servos();
 #if HAL_AP_FETTEC_ONEWIRE_ENABLED
     fetteconwire_ptr->update();
 #endif
